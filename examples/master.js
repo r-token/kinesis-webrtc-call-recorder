@@ -193,17 +193,17 @@ async function postMasterLogin(localView, remoteView, formValues, onStatsReport,
         })
         
         mediaRecorder.ondataavailable = function(event) {
-                console.log('new data available, adding to chunks array')
-                chunks.push(event.data)
+            console.log('new data available, adding to chunks array')
+            chunks.push(event.data)
         }
 
         mediaRecorder.onstop = () => {
-                console.log('saving recording')
-                console.log('audioPlaybackId = ' + audioPlayback)
-                const blob = new Blob(chunks, {
-                        'type': 'audio/mpeg'
-                })
-                chunks = []
+            console.log('saving recording')
+            console.log('audioPlaybackId = ' + audioPlayback)
+            const blob = new Blob(chunks, {
+                    'type': 'audio/mpeg'
+            })
+            chunks = []
             let audioURL = window.URL.createObjectURL(blob)
             audioPlayback.src = audioURL
                 createAudioElement(URL.createObjectURL(blob))
