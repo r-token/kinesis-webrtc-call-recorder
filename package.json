@@ -26,8 +26,7 @@
         "copy-examples-to-dist": "cp -r examples dist",
         "develop": "webpack-dev-server --config webpack.dev.config.js",
         "lint": "eslint 'src/**/*.{js,ts}'",
-        "release": "npm run lint && npm run test && npm run build-all && npm run copy-examples-to-dist",
-        "pm2start": "pm2 start webpack-dev-server"
+        "release": "npm run lint && npm run test && npm run build-all && npm run copy-examples-to-dist"
     },
     "author": "Mitchell Loeppky <mrl@amazon.com>",
     "license": "Apache-2.0",
@@ -55,6 +54,7 @@
     },
     "dependencies": {
         "isomorphic-webcrypto": "^2.3.6",
+        "pm2": "^4.5.5",
         "tslib": "^1.10.0"
     }
 }
