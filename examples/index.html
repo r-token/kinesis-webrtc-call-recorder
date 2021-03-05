@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>KVS WebRTC Test Page</title>
+    <title>Storyboard Call Recorder</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -17,8 +17,8 @@
 <body>
 
 <div class="container mt-3">
-    <h1>KVS WebRTC Test Page</h1>
-    <p>This is the KVS Signaling Channel WebRTC test page. Use this page to connect to a signaling channel as either the MASTER or as a VIEWER.</p>
+    <h1>Storyboard Call Recorder</h1>
+    <p>This is a POC built using AWS Kinesis Video Streams with WebRTC to set up live calls between parties with extremely low latency.</p>
 
     <div class="row loader"></div>
     <div id="main" class="d-none">
@@ -170,6 +170,15 @@
                 <button id="stop-viewer-button" type="button" class="btn btn-primary">Stop Viewer</button>
             </div>
         </div>
+
+	<div id="audio-recorder" class="d-none" style="margin-top: 10px;">
+		<span>
+			<button id="record-audio-button" type="button" class="btn btn-success" style="margin-right: 10px;">Start Recording Audio</button>
+			<button id="stop-recording-button" type="button" class="btn btn-danger">Stop Recording</button>
+		</span>
+		<br />
+		<audio id="audioPlayback" controls preload="auto" style="margin-top: 10px;"></audio>
+	</div>
 
         <h3 id="logs-header">Logs</h3>
         <div class="card bg-light mb-3">

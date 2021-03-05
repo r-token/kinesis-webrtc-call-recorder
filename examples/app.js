@@ -84,6 +84,7 @@ configureLogging();
 $('#master-button').click(async () => {
     $('#form').addClass('d-none');
     $('#master').removeClass('d-none');
+    $('#audio-recorder').removeClass('d-none');
 
     const localView = $('#master .local-view')[0];
     const remoteView = $('#master .remote-view')[0];
@@ -105,11 +106,13 @@ $('#stop-master-button').click(async () => {
 
     $('#form').removeClass('d-none');
     $('#master').addClass('d-none');
+    $('#audio-recorder').addClass('d-none');
 });
 
 $('#viewer-button').click(async () => {
     $('#form').addClass('d-none');
     $('#viewer').removeClass('d-none');
+    $('#audio-recorder').removeClass('d-none');
 
     const localView = $('#viewer .local-view')[0];
     const remoteView = $('#viewer .remote-view')[0];
@@ -131,7 +134,9 @@ $('#stop-viewer-button').click(async () => {
 
     $('#form').removeClass('d-none');
     $('#viewer').addClass('d-none');
+    $('#audio-recorder').addClass('d-none');
 });
+
 
 $('#create-channel-button').click(async () => {
     const formValues = getFormValues();

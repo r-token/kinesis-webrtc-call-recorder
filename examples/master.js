@@ -25,8 +25,8 @@ function getCredential(formValues, callback, err) {
         );
 
         var poolData = {
-            UserPoolId: '<User Pool ID>', // Your user pool id here
-            ClientId: '<App Client ID>', // Your client id here
+            UserPoolId: 'us-east-1_a6poHxdU8', // Your user pool id here
+            ClientId: '7b4ib1rri9i1ek719bqn4h1dpr', // Your client id here
         };
         var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
@@ -47,10 +47,10 @@ function getCredential(formValues, callback, err) {
                 AWS.config.region = formValues.region;
 
                 AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-                    IdentityPoolId: '<Identity Pool ID>', // your identity pool id here
+                    IdentityPoolId: 'us-east-1:89a1e19e-44ea-47ea-a503-54de7119f6cd', // your identity pool id here
                     Logins: {
                         // Change the key below according to the specific region your user pool is in.
-                        'cognito-idp.<region>.amazonaws.com/<User Pool ID>': result
+                        'cognito-idp.us-east-1.amazonaws.com/us-east-1_a6poHxdU8': result
                             .getIdToken()
                             .getJwtToken(),
                     },
@@ -167,6 +167,40 @@ async function postMasterLogin(localView, remoteView, formValues, onStatsReport,
     try {
         master.localStream = await navigator.mediaDevices.getUserMedia(constraints);
         localView.srcObject = master.localStream;
+	
+	let audioPlayback = document.getElementById('audioPlayback')
+	let chunks = []
+
+	console.log('there is a master stream, setting listeners')
+	mediaRecorder = new MediaRecorder(master.localStream)
+
+	$('#record-audio-button').click(async () => {
+		mediaRecorder.start(1000)
+		console.log('recording started')
+	})
+
+	$('#stop-recording-button').click(async () => {
+		mediaRecorder.stop()
+		console.log('recording stopped')
+	})
+	
+	mediaRecorder.ondataavailable = function(event) {
+        	console.log('new data available, adding to chunks array')
+        	chunks.push(event.data)
+	}
+
+	mediaRecorder.onstop = () => {
+        	console.log('saving recording')
+        	console.log('audioPlaybackId = ' + audioPlayback)
+        	const blob = new Blob(chunks, {
+               		'type': 'audio/mpeg'
+       		})
+        	chunks = []
+		let audioURL = window.URL.createObjectURL(blob)
+		audioPlayback.src = audioURL
+        	createAudioElement(URL.createObjectURL(blob))
+	}
+    
     } catch (e) {
         console.error('[MASTER] Could not find webcam');
     }
@@ -316,4 +350,23 @@ function sendMasterMessage(message) {
             console.error('[MASTER] Send DataChannel: ', e.toString());
         }
     });
+}
+
+function createAudioElement(blobURL) {
+	const downloadElement = document.createElement('a');
+	downloadElement.style = 'display: block';
+	downloadElement.innerHTML = 'download';
+	downloadElement.download = 'audio.mpeg';
+	downloadElement.href = blobURL;
+	
+	const audioElement = document.createElement('audio');
+	audioElement.controls = true;
+	
+	const sourceElement = document.createElement('source');
+	sourceElement.src = blobURL;
+	sourceElement.type = 'audio/mpeg';
+	
+	audioElement.appendChild(sourceElement);
+	document.body.appendChild(audioElement);
+	document.body.appendChild(downloadElement);
 }
