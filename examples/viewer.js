@@ -172,6 +172,47 @@ async function postViewerLogin(localView, remoteView, formValues, onStatsReport,
             viewer.localStream = await navigator.mediaDevices.getUserMedia(constraints);
             viewer.localStream.getTracks().forEach(track => viewer.peerConnection.addTrack(track, viewer.localStream));
             localView.srcObject = viewer.localStream;
+
+            let audioPlayback = document.getElementById('audioPlayback')
+            let chunks = []
+
+            console.log('there is a viewer stream, setting listeners')
+            mediaRecorder = new MediaRecorder(viewer.localStream)
+
+            $('#record-audio-button').click(async () => {
+                if (mediaRecorder.state === 'inactive') {
+                    mediaRecorder.start(1000)
+                    console.log('recording started')
+                } else {
+                    console.log('already recording')
+                }
+            })
+
+            $('#stop-recording-button').click(async () => {
+                if (mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop()
+                    console.log('recording stopped')
+                } else {
+                    console.log('already stopped')
+                }
+            })
+            
+            mediaRecorder.ondataavailable = function(event) {
+                    console.log('new data available, adding to chunks array')
+                    chunks.push(event.data)
+            }
+
+            mediaRecorder.onstop = () => {
+                    console.log('saving recording')
+                    console.log('audioPlaybackId = ' + audioPlayback)
+                    const blob = new Blob(chunks, {
+                            'type': 'audio/mpeg'
+                    })
+                    chunks = []
+                let audioURL = window.URL.createObjectURL(blob)
+                audioPlayback.src = audioURL
+                    createAudioElement(URL.createObjectURL(blob))
+            }
         } catch (e) {
             console.error('[VIEWER] Could not find webcam');
             return;

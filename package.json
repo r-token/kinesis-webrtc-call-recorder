@@ -54,6 +54,7 @@
     },
     "dependencies": {
         "isomorphic-webcrypto": "^2.3.6",
+        "pm2": "^4.5.5",
         "tslib": "^1.10.0"
     }
 }
